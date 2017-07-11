@@ -62,8 +62,9 @@ class FileManager
         if ($request->type == 'directory' ) 
         {
             $directories = $this->fileUtils->readDirectories($pathName);
+            $files = $this->fileUtils->readFiles($pathName);
 
-            if(count($directories) == 0)
+            if(count($directories) == 0 && count($files) == 0)
             {
                 if(rmdir($pathName))
                 {
