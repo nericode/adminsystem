@@ -101,18 +101,18 @@ class FileManager
 
     /**
     *
-    * Upload a directory
+    * Upload a file
     * @param request
     */
     public function upload(Request $request)
     {	
     	$file = $request->file('file');
     	
-    	if($file != null) 
-    	{
-    		$realPath = substr($request->path, 37);
+        if($file != null) 
+        {
+        	$realPath = substr($request->path, 37);
         	$request->file->storeAs($realPath, $file->getClientOriginalName());
-		}
+        }
     }
 
     /**
