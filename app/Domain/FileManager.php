@@ -24,14 +24,9 @@ class FileManager
 
     /**
     *
-    * Open a directory
+    * Store a directory
     * @param request
     */
-	public function open(Request $request)
-    {
-    	$this->path = $request->path . DIRECTORY_SEPARATOR . $request->name;
-    }
-
     public function store(Request $request)
     {
     	$pathName = $request->path . DIRECTORY_SEPARATOR . $request->name;
@@ -43,10 +38,13 @@ class FileManager
 	    		$this->storeDirectorieDataBase($request->name, $pathName);
     		}
     	}
-    	
-    	$this->path = $request->path;
     }
 
+    /**
+    *
+    * Store a directory of data base
+    * @param request
+    */
     private function storeDirectorieDataBase($name, $pathName)
     {
         $directorie = new Directorie;
@@ -55,38 +53,49 @@ class FileManager
         $directorie->save();
     }
 
+    /**
+    *
+    * Delete a directory/file
+    * @param request
+    */
     public function delete(Request $request)
     {
         $pathName = $request->path . DIRECTORY_SEPARATOR . $request->name;
 
-        if ($request->type == 'directory' ) 
+        if(file_exists($pathName)) 
         {
-            $directories = $this->fileUtils->readDirectories($pathName);
-            $files = $this->fileUtils->readFiles($pathName);
-
-            if(count($directories) == 0 && count($files) == 0)
+            if ($request->type == 'directory' ) 
             {
-                if(rmdir($pathName))
+                $directories = $this->fileUtils->readDirectories($pathName);
+                $files = $this->fileUtils->readFiles($pathName);
+
+                if(count($directories) == 0 && count($files) == 0)
                 {
-                    $this->deleteDirectorieDataBase($request->name);
+                    if(rmdir($pathName))
+                    {
+                        $this->deleteDirectorieDataBase($request->name);
+                    }
+                }
+                else
+                {
+
                 }
             }
-            else
+            else if ($request->type == 'file')
             {
-
+                if(unlink($pathName))
+                {
+                   // Nothing
+                }
             }
         }
-        else if ($request->type == 'file')
-        {
-            if(unlink($pathName))
-            {
-               // Nothing
-            }
-        }
-    		
-    	$this->path = $request->path;
     }
 
+    /**
+    *
+    * Delete a directory/file of data base
+    * @param request
+    */
     private function deleteDirectorieDataBase($name)
     {
         $directorie = Directorie::where('name', $name)->get();
@@ -94,28 +103,39 @@ class FileManager
         $mdirectorie->delete();
     }
 
+    /**
+    *
+    * Upload a directory
+    * @param request
+    */
     public function upload(Request $request)
     {	
-    	$documentFile = $request->file('document');
+    	$document = $request->file('document');
     	
-    	if($documentFile != null) 
+    	if($document != null) 
     	{
-    		$document = $documentFile;
     		$realPath = substr($request->path, 37);
         	$request->document->storeAs($realPath, $document->getClientOriginalName());
 		}
-        
-        $this->path = $request->path;
-
     }
 
-    public function getDirectories()
+    /**
+    *
+    * Get all directories with path
+    * @param $path
+    */
+    public function getDirectories($path)
     {
-        return $this->fileUtils->readDirectories($this->path);
+        return $this->fileUtils->readDirectories($path);
     }
 
-    public function getFiles()
+    /**
+    *
+    * Get all directories with files
+    * @param $path
+    */
+    public function getFiles($path)
     {
-        return $this->fileUtils->readFiles($this->path);
+        return $this->fileUtils->readFiles($path);
     }
 }

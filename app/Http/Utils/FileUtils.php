@@ -1,10 +1,12 @@
 <?php
 
 namespace App\Http\Utils;
+    
+define('DIRECTORY','directory');
+define('FILE','file');
 
 class FileUtils
 {
-
     /**
     * Read all children directory 
     * @param $path
@@ -12,12 +14,12 @@ class FileUtils
     */
 	public function readDirectories($rootPath)
     {
-    	return $this->getData($rootPath, 'directorie');;
+    	return $this->getData($rootPath, DIRECTORY);;
     }
 
     public function readFiles($rootPath) 
     {
-        return $this->getData($rootPath, 'file');
+        return $this->getData($rootPath, FILE);
     }
 
     private function getData($rootPath = '', $type = '')
@@ -28,28 +30,29 @@ class FileUtils
             $array = array();
             $invisibleFileNames = array(".", "..", ".gitignore", "public");
 
-            // Read files into directory
-            while($files = readdir($directory)) 
+            // Read files/directory into directory
+            while($archivist = readdir($directory)) 
             {     
                 // Match with invisible files
-                if(!in_array($files, $invisibleFileNames)) 
+                if(!in_array($archivist, $invisibleFileNames)) 
                 {
-                    // Validation if file, and add a array
-                    if ($type == 'file') {
-                        if(is_file($rootPath . DIRECTORY_SEPARATOR . $files) &&
-                            file_exists($rootPath . DIRECTORY_SEPARATOR . $files)) 
-                        {
-                            $array[] = $files;
-                        }
-                    }
-                     // Validation if direcotorie, and add a array
-                    else if ($type == 'directorie') 
+                    switch ($type) 
                     {
-                        if(is_dir($rootPath . DIRECTORY_SEPARATOR . $files) &&
-                            file_exists($rootPath . DIRECTORY_SEPARATOR . $files)) 
-                        {   
-                            $array[] = $files;
-                        }
+                        case FILE:
+                            if(is_file($rootPath . DIRECTORY_SEPARATOR . $archivist) &&
+                                file_exists($rootPath . DIRECTORY_SEPARATOR . $archivist)) 
+                            {
+                                $array[] = $archivist;
+                            }
+                            break;
+
+                        case DIRECTORY:
+                            if(is_dir($rootPath . DIRECTORY_SEPARATOR . $archivist) &&
+                                file_exists($rootPath . DIRECTORY_SEPARATOR . $archivist)) 
+                            {   
+                                $array[] = $archivist;
+                            }
+                            break;
                     }
                 }       
             }

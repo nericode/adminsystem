@@ -35,7 +35,6 @@ class FileController extends Controller
     */
     public function open(Request $request)
     {
-    	$this->fileManager->open($request);
         return $this->showView($request->path . DIRECTORY_SEPARATOR . $request->name);
     }
 
@@ -76,8 +75,8 @@ class FileController extends Controller
     */
     public function showView($path = '')
     {
-        $directories = $this->fileManager->getDirectories();
-        $files = $this->fileManager->getFiles();
+        $directories = $this->fileManager->getDirectories($path);
+        $files = $this->fileManager->getFiles($path);
 
         return view('file.home')->with('directories', $directories)
         ->with('path', $path)->with('files', $files);
