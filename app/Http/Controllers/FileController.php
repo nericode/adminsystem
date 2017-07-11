@@ -35,7 +35,7 @@ class FileController extends Controller
     */
     public function open(Request $request)
     {
-        return $this->showView($request->path . DIRECTORY_SEPARATOR . $request->name);
+        return $this->showView($request->path);
     }
 
     /**

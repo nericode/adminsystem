@@ -44,7 +44,7 @@ class FileUtils
                             {
                                 $array[] = $archivist;
                             }
-                            break;
+                        break;
 
                         case DIRECTORY:
                             if(is_dir($rootPath . DIRECTORY_SEPARATOR . $archivist) &&
@@ -52,7 +52,7 @@ class FileUtils
                             {   
                                 $array[] = $archivist;
                             }
-                            break;
+                        break;
                     }
                 }       
             }

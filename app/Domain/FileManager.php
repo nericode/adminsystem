@@ -110,12 +110,12 @@ class FileManager
     */
     public function upload(Request $request)
     {	
-    	$document = $request->file('document');
+    	$file = $request->file('file');
     	
-    	if($document != null) 
+    	if($file != null) 
     	{
     		$realPath = substr($request->path, 37);
-        	$request->document->storeAs($realPath, $document->getClientOriginalName());
+        	$request->file->storeAs($realPath, $file->getClientOriginalName());
 		}
     }
 

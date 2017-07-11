@@ -34,7 +34,7 @@
                         {{ csrf_field() }}
                         <label for="name">Fichero: </label>
                         <input type="hidden" name="path" value="{{ $path }}">
-                        <input class="form-control" type="file" name="document" required="required">
+                        <input class="form-control" type="file" name="file" required="required">
                         <button class="btn btn-primary" type="submit" >
                             <span class="glyphicon glyphicon-open-file" aria-hidden="true"></span> 
                         </button>
@@ -70,8 +70,7 @@
                             <td>
                             <form action="{{ route('open_directorie') }}" method="post">
                                 {{ csrf_field() }}
-                                <input type="hidden" name="name" value="{{ $directorie }}">
-                                <input type="hidden" name="path" value="{{ $path }}">
+                                <input type="hidden" name="path" value="{{ $path . DIRECTORY_SEPARATOR . $directorie }}">
                                 <button type="submit" class="btn btn-default btn-small ">
                                     <span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span>
                                 </button>
