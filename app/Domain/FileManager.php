@@ -11,16 +11,16 @@ class FileManager
     // default path
     public $path = '/var/www/html/adminsystem/storage/app';
 
-	private $fileUtils;
+    private $fileUtils;
 
-	/**
-	*
-	* Contruct that initialize FileUtils
-	*/
-	function __construct()
-	{
-		$this->fileUtils = new FileUtils;
-	}
+    /**
+    *
+    * Contruct that initialize FileUtils
+    */
+    function __construct()
+    {
+    	$this->fileUtils = new FileUtils;
+    }
 
     /**
     *
@@ -76,10 +76,6 @@ class FileManager
                         $this->deleteDirectorieDataBase($request->name);
                     }
                 }
-                else
-                {
-
-                }
             }
             else if ($request->type == 'file')
             {
@@ -93,7 +89,7 @@ class FileManager
 
     /**
     *
-    * Delete a directory/file of data base
+    * Delete a directory of data base
     * @param request
     */
     private function deleteDirectorieDataBase($name)
@@ -131,7 +127,7 @@ class FileManager
 
     /**
     *
-    * Get all directories with files
+    * Get all directories with path
     * @param $path
     */
     public function getFiles($path)

@@ -8,22 +8,21 @@ use Illuminate\Http\Request;
 
 class FileController extends Controller
 {
-	private $fileManager;
-	
+    private $fileManager;
+    
+    /**
+    *
+    * Contruct that initialize FileManager
+    */
+    function __construct()
+    {
+        $this->fileManager = new FileManager();
+    }
 
-	/**
-	*
-	* Contruct that initialize FileManager
-	*/
-	function __construct()
-	{
-		$this->fileManager = new FileManager();
-	}
-
-	/**
-	* Show a index page
-	* @return view
-	*/
+    /**
+    * Show a index page
+    * @return view
+    */
     public function index()
     {
     	return $this->showView($this->fileManager->path);
