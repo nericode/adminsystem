@@ -19,5 +19,5 @@ class File extends Model
     /**
     * @param $timestamps, especifica si se requiere fechas en la tabla.
     */
-    public	$timestamps	=	false;
+    public	$timestamps = false;
 }

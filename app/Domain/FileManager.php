@@ -2,26 +2,13 @@
 
 namespace App\Domain;
 
+use App\File;
 use App\Directorie;
 use Illuminate\Http\Request;
 use App\Http\Utils\FileUtils;
 
 class FileManager
 {	
-    // default path
-    public $path = '/var/www/html/adminsystem/storage/app';
-
-    private $fileUtils;
-
-    /**
-    *
-    * Contruct that initialize FileUtils
-    */
-    function __construct()
-    {
-    	$this->fileUtils = new FileUtils;
-    }
-
     /**
     *
     * Store a directory
@@ -66,8 +53,10 @@ class FileManager
         {
             if ($request->type == 'directory' ) 
             {
-                $directories = $this->fileUtils->readDirectories($pathName);
-                $files = $this->fileUtils->readFiles($pathName);
+                $fileUtils = new FileUtils;
+
+                $directories = $fileUtils->getDirectories($pathName);
+                $files = $fileUtils->getFiles($pathName);
 
                 if(count($directories) == 0 && count($files) == 0)
                 {
@@ -111,27 +100,25 @@ class FileManager
         if($file != null) 
         {
         	$realPath = substr($request->path, 37);
-        	$request->file->storeAs($realPath, $file->getClientOriginalName());
+            $name = $file->getClientOriginalName();
+        	$request->file->storeAs($realPath, $name);
+
+            //$this->storeFileDataBase($name, $realPath);
         }
     }
 
     /**
     *
-    * Get all directories with path
-    * @param $path
+    * Store a file of data base
+    * @param request
     */
-    public function getDirectories($path)
+    private function storeFileDataBase($name, $pathName)
     {
-        return $this->fileUtils->readDirectories($path);
+        $file = new File;
+        $file->name = $name;
+        $file->path = $pathName;
+        $file->id_directorie = 1; // Change ID for ID dinamically
+        $file->save();
     }
 
-    /**
-    *
-    * Get all directories with path
-    * @param $path
-    */
-    public function getFiles($path)
-    {
-        return $this->fileUtils->readFiles($path);
-    }
 }

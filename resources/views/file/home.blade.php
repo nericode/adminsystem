@@ -12,7 +12,17 @@
             	<div class="row">
             		<div class="col-md-7">
             			<h3><b>Ficheros</b></h3>
-                        {{ substr($path, 37) }}
+                        @if(substr($path, 37) == "")
+                        <b>Principal</b>
+                        @else
+                        @foreach($paths as $mpath)
+                        <form class="form-inline" action="{{ route('open_directorie') }}" method="post">
+                            {{ csrf_field() }}
+                            <input type="hidden" name="path" value="{{ $mpath }}">
+                            <button type="submit">{{ substr($mpath, 37) }}</button>
+                        </form>
+                        @endforeach
+                        @endif
             		</div>
                     <div class="col-md-5">
                     {{-- For store directory --}}
@@ -115,7 +125,9 @@
                             {{ $file }}
                             </td>
                             <td>
-                            <form action="#" method="post">
+                            <form action="{{ route('download_file') }}" method="post">
+                                {{ csrf_field() }}
+                                <input type="hidden" name="path" value="{{ $path . DIRECTORY_SEPARATOR . $file }}">
                                 <button type="submit" class="btn btn-default btn-small ">
                                     <span class="glyphicon glyphicon-download-alt" aria-hidden="true"></span>
                                 </button> 

@@ -7,21 +7,62 @@ define('FILE','file');
 
 class FileUtils
 {
+
     /**
-    * Read all children directory 
-    * @param $path
-    * @return array
+    * default path
     */
-	public function readDirectories($rootPath)
+    public $path = '/var/www/html/adminsystem/storage/app';
+
+    /**
+    *
+    * Get all directories with path
+    * @param $path
+    */
+    public function getDirectories($path)
     {
-    	return $this->getData($rootPath, DIRECTORY);;
+        return $this->getData($path, DIRECTORY);
     }
 
-    public function readFiles($rootPath) 
+    /**
+    *
+    * Get all directories with path
+    * @param $path
+    */
+    public function getFiles($path)
     {
-        return $this->getData($rootPath, FILE);
+        return $this->getData($path, FILE);
     }
 
+    /**
+    *
+    * Get all path pieces with path
+    * @param $path
+    */
+    public function getPaths($path)
+    {   
+        $addPath = "";
+        $realPaths = array();
+        $paths = array();
+
+        $realPath = substr($path, 37);
+        $paths = explode("/", $realPath);
+
+
+        foreach ($paths as $mpath)
+        {
+            $addPath .= $mpath . DIRECTORY_SEPARATOR;
+            $realPaths[] = $this->path . $addPath;
+        }
+
+        return $realPaths;
+    }
+
+    /**
+    *
+    * Get all data(files/directory) 
+    * @param $path
+    * @param $type
+    */
     private function getData($rootPath = '', $type = '')
     {
         // Open directory

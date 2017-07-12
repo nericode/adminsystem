@@ -25,6 +25,10 @@ body {
     border-color: #17845f;
 }
 
+.form-inline {
+    display: inline;
+}
+
 input[type=file] {
     display: inline;
 }
