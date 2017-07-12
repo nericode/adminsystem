@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Domain\FileManager;
+use App\Directorie;
 use Illuminate\Http\Request;
-use App\Http\Utils\FileUtils;
+use App\Application\Common\Archivist;
+use App\Application\Service\FileManager;
 
 class FileController extends Controller
 {
@@ -30,7 +31,7 @@ class FileController extends Controller
     */
     public function index()
     {
-    	return $this->showView($this->path);
+        return $this->showView($this->path);
     }
 
     /**
@@ -48,7 +49,9 @@ class FileController extends Controller
     */
     public function store(Request $request)
     {
-    	$this->fileManager->store($request);
+        $pathName = $request->path . DIRECTORY_SEPARATOR . $request->name;
+    	$this->fileManager->store($request->name, $pathName);
+
     	return $this->showView($request->path);
     }
 
@@ -58,7 +61,9 @@ class FileController extends Controller
     */
     public function delete(Request $request)
     {
-    	$this->fileManager->delete($request);
+        $pathName = $request->path . DIRECTORY_SEPARATOR . $request->name;
+    	$this->fileManager->delete($request->name, $pathName, $request->type);
+
     	return $this->showView($request->path);
     }
 
@@ -68,7 +73,9 @@ class FileController extends Controller
     */
     public function upload(Request $request)
     {	
-        $this->fileManager->upload($request);
+        $file = $request->file('file');
+        $this->fileManager->upload($file, $request->path);
+
         return $this->showView($request->path);
         
     }
@@ -89,11 +96,11 @@ class FileController extends Controller
     */
     public function showView($path = '')
     {
-        $fileUtils = new FileUtils;
+        $archivist   = new Archivist($path);
 
-        $directories = $fileUtils->getDirectories($path);
-        $files = $fileUtils->getFiles($path);
-        $paths = $fileUtils->getPaths($path);
+        $directories = $archivist->directories();
+        $files       = $archivist->files();
+        $paths       = $archivist->paths();
 
         return view('file.home')->with('directories', $directories)
         ->with('path', $path)->with('files', $files)->with('paths', $paths);

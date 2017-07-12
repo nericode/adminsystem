@@ -1,26 +1,27 @@
 <?php
 
-namespace App\Http\Utils;
-    
-define('DIRECTORY','directory');
-define('FILE','file');
+namespace App\Application\Common;
 
-class FileUtils
-{
 
-    /**
-    * default path
-    */
-    public $path = '/var/www/html/adminsystem/storage/app';
+class Archivist
+{	
+	private $defaultPath = '/var/www/html/adminsystem/storage/app';
 
-    /**
+	private $path;
+
+	function __construct($path)
+	{
+		$this->path = $path;
+	}
+
+	/**
     *
     * Get all directories with path
     * @param $path
     */
-    public function getDirectories($path)
+    public function directories()
     {
-        return $this->getData($path, DIRECTORY);
+        return $this->getData($this->path, 'directory');
     }
 
     /**
@@ -28,9 +29,9 @@ class FileUtils
     * Get all directories with path
     * @param $path
     */
-    public function getFiles($path)
+    public function files()
     {
-        return $this->getData($path, FILE);
+        return $this->getData($this->path, 'file');
     }
 
     /**
@@ -38,20 +39,20 @@ class FileUtils
     * Get all path pieces with path
     * @param $path
     */
-    public function getPaths($path)
+    public function paths()
     {   
-        $addPath = "";
+        $addPath   = "";
         $realPaths = array();
-        $paths = array();
+        $paths     = array();
 
-        $realPath = substr($path, 37);
-        $paths = explode("/", $realPath);
+        $realPath  = substr($this->path, 37);
+        $paths     = explode("/", $realPath);
 
 
         foreach ($paths as $mpath)
         {
             $addPath .= $mpath . DIRECTORY_SEPARATOR;
-            $realPaths[] = $this->path . $addPath;
+            $realPaths[] = $this->defaultPath . $addPath;
         }
 
         return $realPaths;
@@ -79,7 +80,7 @@ class FileUtils
                 {
                     switch ($type) 
                     {
-                        case FILE:
+                        case 'file':
                             if(is_file($rootPath . DIRECTORY_SEPARATOR . $archivist) &&
                                 file_exists($rootPath . DIRECTORY_SEPARATOR . $archivist)) 
                             {
@@ -87,7 +88,7 @@ class FileUtils
                             }
                         break;
 
-                        case DIRECTORY:
+                        case 'directory':
                             if(is_dir($rootPath . DIRECTORY_SEPARATOR . $archivist) &&
                                 file_exists($rootPath . DIRECTORY_SEPARATOR . $archivist)) 
                             {   
@@ -101,5 +102,4 @@ class FileUtils
 
         return $array;
     }
-
 }
