@@ -15,11 +15,12 @@
                         @if(substr($path, 37) == "")
                         <b>Principal</b>
                         @else
-                        @foreach($paths as $mpath)
+                        <a class="btn btn-primary" style="color: #fff;" href="{{ route('files') }}">Inicio</a>
+                        @foreach($paths as $currentPath)
                         <form class="form-inline" action="{{ route('open_directorie') }}" method="post">
                             {{ csrf_field() }}
-                            <input type="hidden" name="path" value="{{ $mpath }}">
-                            <button type="submit">{{ substr($mpath, 37) }}</button>
+                            <input type="hidden" name="path" value="{{ $currentPath["pathName"] }}">
+                            <button class="btn btn-primary" type="submit">{{ $currentPath["name"] }}</button>
                         </form>
                         @endforeach
                         @endif

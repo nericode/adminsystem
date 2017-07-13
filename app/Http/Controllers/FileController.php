@@ -102,8 +102,11 @@ class FileController extends Controller
         $files       = $archivist->files();
         $paths       = $archivist->paths();
 
-        return view('file.home')->with('directories', $directories)
-        ->with('path', $path)->with('files', $files)->with('paths', $paths);
+        return view('file.home')
+        ->with('directories', $directories)
+        ->with('path', $path)
+        ->with('files', $files)
+        ->with('paths', $paths);
     }
 
 }

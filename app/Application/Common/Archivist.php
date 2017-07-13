@@ -5,7 +5,7 @@ namespace App\Application\Common;
 
 class Archivist
 {	
-	private $defaultPath = '/var/www/html/adminsystem/storage/app';
+	private $defaultPath = '/var/www/html/adminsystem/storage/app/';
 
 	private $path;
 
@@ -45,14 +45,20 @@ class Archivist
         $realPaths = array();
         $paths     = array();
 
-        $realPath  = substr($this->path, 37);
+        $realPath  = substr($this->path, 38);
         $paths     = explode("/", $realPath);
 
 
         foreach ($paths as $mpath)
         {
-            $addPath .= $mpath . DIRECTORY_SEPARATOR;
-            $realPaths[] = $this->defaultPath . $addPath;
+            if($mpath != "")
+            {
+                $addPath .= $mpath . DIRECTORY_SEPARATOR;
+                $realPaths[] = [
+                    'pathName' => $this->defaultPath . $addPath,
+                    'name' => $mpath,
+                ];
+            }
         }
 
         return $realPaths;
