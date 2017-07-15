@@ -2,7 +2,6 @@
 
 namespace App\Application\Service;
 
-use App\File;
 use App\Directorie;
 use Illuminate\Http\Request;
 use App\Application\Common\Alert;
@@ -11,6 +10,10 @@ use App\Application\Database\DatabaseRepository;
 
 class FileUseCase
 {	
+    private $error = false;
+
+    private $success = true;
+
     private $alert;
 
     private $databaseRepository;
@@ -29,15 +32,20 @@ class FileUseCase
     {
         if(file_exists($pathName)) 
         {
-            $this->alert->message('Ups!, el directorio con ese nombre ya existe.', 'danger');
-            return true;
+            $this->alert->message('Ups!, el directorio con ese nombre ya existe', 'danger');
+            return $this->error;
         }
 
-        if(mkdir($pathName, 0777)) 
+        if(!mkdir($pathName, 0777)) 
         {
-            $this->databaseRepository->storeDirectorie($name, $pathName);
-            $this->alert->message('Directorio creado con exito.', 'success');
+            $this->alert->message('Ups!, el directorio no se pudo crear', 'warning');
+            return $this->error;
         }
+
+        $this->databaseRepository->storeDirectorie($name, $pathName);
+        $this->alert->message('Directorio creado con exito.', 'success');
+
+        return $this->success;
     }
 
 
@@ -51,7 +59,7 @@ class FileUseCase
         if(!file_exists($pathName)) 
         {
             $this->alert->message('Ups!, hubo un error', 'danger');
-            return true;
+            return $this->error;
         }
 
         switch ($type) 
@@ -75,17 +83,23 @@ class FileUseCase
     public function deleteDirectory($pathName, $name)
     {
         $archivist   = new Archivist($pathName);
+
         if(!$archivist->isEmpty())
         {
             $this->alert->message('Ups!, el directorio no esta vacio', 'warning');
-            return true;
+            return $this->error;
         }
 
-        if(rmdir($pathName))
+        if(!rmdir($pathName))
         {
-            $this->databaseRepository->deleteDirectorie($name);
-            $this->alert->message('Directorio eliminado.', 'success');
+            $this->alert->message('Ups!, el directorio no se pudo eliminar', 'danger');
+            return $this->error;
         }
+        
+        $this->databaseRepository->deleteDirectorie($name);
+        $this->alert->message('Directorio eliminado.', 'success');
+        
+        return $this->success;
     }
 
     /**
@@ -97,10 +111,13 @@ class FileUseCase
     {
         if(!unlink($pathName))
         {
-            $this->alert->message('Ups!, hubo un error', 'danger');
+            $this->alert->message('Ups!, hubo un error al intentar elmininar el archivo', 'danger');
+            return $this->error;
         }
 
         $this->alert->message('Archivo eliminado con exito', 'success');
+
+        return $this->success;
     }
    
 
@@ -113,29 +130,16 @@ class FileUseCase
     {	
         if($file == null) 
         {
-            $this->alert->message('Ups!, hubo un error', 'danger');
-            return true;
+            $this->alert->message('Ups!, necesitas cargar un archivo', 'danger');
+            return $this->error;
         }
 
         $realPath = substr($pathName, 37);
         $name     = $file->getClientOriginalName();
         $file->storeAs($realPath, $name);
         $this->alert->message('Archivo subido con exito', 'success');
-    }
 
-
-    /**
-    *
-    * Store a file in data base
-    * @param request
-    */
-    private function storeFileDataBase($name, $pathName)
-    {
-        $file                = new File;
-        $file->name          = $name;
-        $file->path          = $pathName;
-        $file->id_directorie = 1; // Change ID for ID dinamically
-        $file->save();
+        return $this->success;
     }
 
 }

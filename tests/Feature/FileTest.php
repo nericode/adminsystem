@@ -20,8 +20,8 @@ class FileTest extends TestCase
     public function test_any_user_can_create_a_directory()
     {
         
-        $fileManager = new FileUseCase;
-        $fileManager->store('test_one', $this->path);
+        $fileUseCase = new FileUseCase;
+        $fileUseCase->store('test_one', $this->path);
 
         $directorie = new Directorie;
         $myDirectorie = $directorie->where('name', 'test_one')->get();
@@ -35,27 +35,34 @@ class FileTest extends TestCase
 
     public function test_any_user_can_delete_a_directory()
     {
-        $fileManager = new FileUseCase;
+        $fileUseCase = new FileUseCase;
         $archivist   = new Archivist($this->path);
 
-        $fileManager->delete('test_one', $this->path, 'directory');
+        $fileUseCase->delete('test_one', $this->path, 'directory');
         $this->assertTrue(true);
     }
 
     public function test_any_user_can_upload_a_file()
     {
-        $fileManager = new FileUseCase;
-        $path = $fileManager->upload(UploadedFile::fake()->image('avatar.jpg'), $this->path);
-
-        //$this->assertSame($this->path . 'avatar.jpg', $path);
+        $fileUseCase = new FileUseCase;
+        $fileUseCase->upload(UploadedFile::fake()->image('avatar.jpg'), $this->path);
     }
 
     public function test_any_user_can_delete_a_file()
     {
-        $fileManager = new FileUseCase;
+        $fileUseCase = new FileUseCase;
         if(unlink($this->path . 'avatar.jpg'))
         {
             $this->assertTrue(true);
         }
+    }
+
+    public function test_a_fila_have_not_that_be_null()
+    {
+        
+        $fileUseCase = new FileUseCase;
+        $upload = $fileUseCase->upload(null, $this->path);
+
+        $this->assertSame(false, $upload);
     }
 }
