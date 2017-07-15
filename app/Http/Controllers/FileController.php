@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Directorie;
 use Illuminate\Http\Request;
+use App\Application\Common\Alert;
+use App\Http\Requests\FileRequest;
 use App\Application\Common\Archivist;
-use App\Application\Service\FileManager;
+use App\Application\Service\FileUseCase;
 
 class FileController extends Controller
 {
@@ -14,15 +16,15 @@ class FileController extends Controller
     /**
     * default path
     */
-    public $path = '/var/www/html/adminsystem/storage/app';
+    public $path = '/var/www/html/adminsystem/storage/app/';
 
     /**
     *
-    * Contruct that initialize FileManager
+    * Contruct that initialize FileUseCase
     */
     function __construct()
     {
-        $this->fileManager = new FileManager();
+        $this->fileUseCase = new FileUseCase();
     }
 
     /**
@@ -50,7 +52,7 @@ class FileController extends Controller
     public function store(Request $request)
     {
         $pathName = $request->path . DIRECTORY_SEPARATOR . $request->name;
-    	$this->fileManager->store($request->name, $pathName);
+    	$this->fileUseCase->store($request->name, $pathName);
 
     	return $this->showView($request->path);
     }
@@ -62,7 +64,7 @@ class FileController extends Controller
     public function delete(Request $request)
     {
         $pathName = $request->path . DIRECTORY_SEPARATOR . $request->name;
-    	$this->fileManager->delete($request->name, $pathName, $request->type);
+    	$this->fileUseCase->delete($request->name, $pathName, $request->type);
 
     	return $this->showView($request->path);
     }
@@ -74,7 +76,7 @@ class FileController extends Controller
     public function upload(Request $request)
     {	
         $file = $request->file('file');
-        $this->fileManager->upload($file, $request->path);
+        $this->fileUseCase->upload($file, $request->path);
 
         return $this->showView($request->path);
         
@@ -82,7 +84,7 @@ class FileController extends Controller
 
     /**
     * Download a file
-    * @return view
+    * @return download
     */
     public function download(Request $request)
     {   

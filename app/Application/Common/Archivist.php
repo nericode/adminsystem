@@ -5,7 +5,7 @@ namespace App\Application\Common;
 
 class Archivist
 {	
-	private $defaultPath = '/var/www/html/adminsystem/storage/app/';
+	public $defaultPath = '/var/www/html/adminsystem/storage/app/';
 
 	private $path;
 
@@ -14,31 +14,19 @@ class Archivist
 		$this->path = $path;
 	}
 
-	/**
-    *
-    * Get all directories with path
-    * @param $path
-    */
+	/** Get all directories into archivist */
     public function directories()
     {
         return $this->getData($this->path, 'directory');
     }
 
-    /**
-    *
-    * Get all directories with path
-    * @param $path
-    */
+    /** Get all files into archivist */
     public function files()
     {
         return $this->getData($this->path, 'file');
     }
 
-    /**
-    *
-    * Get all path pieces with path
-    * @param $path
-    */
+    /** Get an array of all names and path names of a path */
     public function paths()
     {   
         $addPath   = "";
@@ -49,14 +37,14 @@ class Archivist
         $paths     = explode("/", $realPath);
 
 
-        foreach ($paths as $mpath)
+        foreach ($paths as $currentPath)
         {
-            if($mpath != "")
+            if($currentPath != "")
             {
-                $addPath .= $mpath . DIRECTORY_SEPARATOR;
+                $addPath .= $currentPath . DIRECTORY_SEPARATOR;
                 $realPaths[] = [
                     'pathName' => $this->defaultPath . $addPath,
-                    'name' => $mpath,
+                    'name' => $currentPath,
                 ];
             }
         }
@@ -64,8 +52,7 @@ class Archivist
         return $realPaths;
     }
 
-    /**
-    *
+    /** 
     * Get all data(files/directory) 
     * @param $path
     * @param $type
@@ -107,5 +94,16 @@ class Archivist
         }
 
         return $array;
+    }
+
+    /** Valid if the archivist is empty */
+    public function isEmpty()
+    {
+        if (count($this->directories()) == 0 && count($this->files()) == 0) 
+        {
+            return true;
+        }
+
+        return false;
     }
 }

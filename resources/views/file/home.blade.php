@@ -2,6 +2,13 @@
 
 @section('container')
 
+@include('file.alert')
+
+{{-- @if($errors->has())
+   @foreach ($errors->all() as $error)
+      <div>{{ $error }}</div>
+  @endforeach
+@endif --}}
 
 <div class="row">
     <div class="col-lg-12">
@@ -10,45 +17,41 @@
         	{{-- Panel heading --}}
             <div class="panel-heading">
             	<div class="row">
-            		<div class="col-md-7">
-            			<h3><b>Ficheros</b></h3>
-                        @if(substr($path, 37) == "")
-                        <b>Principal</b>
-                        @else
-                        <a class="btn btn-primary" style="color: #fff;" href="{{ route('files') }}">Inicio</a>
+            		<div class="col-md-10">
+                        {{-- List of paths --}}
+                        <ul class="breadcrumb">
+                        <li><a class="btn btn-primary btn-path" href="{{ route('files') }}">Principal</a></li>
                         @foreach($paths as $currentPath)
-                        <form class="form-inline" action="{{ route('open_directorie') }}" method="post">
-                            {{ csrf_field() }}
-                            <input type="hidden" name="path" value="{{ $currentPath["pathName"] }}">
-                            <button class="btn btn-primary" type="submit">{{ $currentPath["name"] }}</button>
-                        </form>
+                        
+                            <li>
+                                <form action="{{ route('open_directorie') }}" method="get">
+                                    {{ csrf_field() }}
+                                    <input type="hidden" name="path" value="{{ $currentPath["pathName"] }}">
+                                    <button class="btn btn-primary btn-path" type="submit">{{ $currentPath["name"] }}</button>
+                                </form>
+                            </li>
+                        
                         @endforeach
-                        @endif
+                        </ul>
             		</div>
-                    <div class="col-md-5">
+                    <div class="col-md-2" >
                     {{-- For store directory --}}
-                    <form action="{{ route('store_directorie') }}" method="post" class="form-inline">
+                    <form action="{{ route('store_directorie') }}" method="post" class="form-inline pull-right">
                         {{ csrf_field() }}
-
-                        <div class="form-group">
-                            <label for="name">Directorio: </label>
-                            <input class="form-control" type="text" name="name" placeholder="Nombre del directorio" required>
-                        </div>
-
                         <input type="hidden" name="path" value="{{ $path }}">
-                        <button class="btn btn-primary" type="submit" >
+                        <button class="btn btn-primary btn-path" type="button" data-toggle="modal" data-target="#modalDirectory" title="Crear directorio">
                             <span class="glyphicon glyphicon-folder-close" aria-hidden="true"></span> 
                         </button>
-                    </form><br>
+                        @include('modals.modal_create_directory')
+                    </form>
                     {{-- For upload a new file --}}
-                    <form action="{{ route('upload_file') }}" class="form-inline" method="post" enctype="multipart/form-data">
+                    <form action="{{ route('upload_file') }}" class="form-inline pull-right" method="post" enctype="multipart/form-data">
                         {{ csrf_field() }}
-                        <label for="name">Fichero: </label>
                         <input type="hidden" name="path" value="{{ $path }}">
-                        <input class="form-control" type="file" name="file" required="required">
-                        <button class="btn btn-primary" type="submit" >
+                        <button class="btn btn-primary btn-path" type="button" data-toggle="modal" data-target="#modalFile" title="Subir archivo">
                             <span class="glyphicon glyphicon-open-file" aria-hidden="true"></span> 
                         </button>
+                        @include('modals.modal_upload_file')
                     </form>
                     </div>
 
@@ -79,7 +82,7 @@
                             {{ $directorie }}
                             </td>
                             <td>
-                            <form action="{{ route('open_directorie') }}" method="post">
+                            <form action="{{ route('open_directorie') }}" method="get">
                                 {{ csrf_field() }}
                                 <input type="hidden" name="path" value="{{ $path . DIRECTORY_SEPARATOR . $directorie }}">
                                 <button type="submit" class="btn btn-default btn-small ">

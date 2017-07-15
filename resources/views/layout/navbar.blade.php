@@ -24,9 +24,6 @@
 
                 <!-- Right Side Of Navbar -->
                 <ul class="nav navbar-nav navbar-right">
-                   <li>
-                       <a class="btn btn-primary" style="color: #fff;" href="{{ route('files') }}">Storage</a>
-                   </li>
                     
                 </ul>
             </div>
