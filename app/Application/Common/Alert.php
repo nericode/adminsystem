@@ -9,4 +9,9 @@ class Alert
 		session()->flash('alert', $message);
         session()->flash('response', $response);
 	}
+
+	public function flush()
+	{
+		session()->flush();
+	}
 }

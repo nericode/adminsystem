@@ -58,7 +58,7 @@ class FileUseCase
     {
         if(!file_exists($pathName)) 
         {
-            $this->alert->message('Ups!, hubo un error', 'danger');
+            $this->alert->message('Ups!, hubo un error al intentar eliminar el archivo', 'danger');
             return $this->error;
         }
 
@@ -71,6 +71,8 @@ class FileUseCase
                 $this->deleteFile($pathName);
                 break;
         }
+
+        return $this->success;
     }
 
 
@@ -80,7 +82,7 @@ class FileUseCase
     * @param pathName
     * @param name
     */
-    public function deleteDirectory($pathName, $name)
+    private function deleteDirectory($pathName, $name)
     {
         $archivist   = new Archivist($pathName);
 
@@ -98,8 +100,6 @@ class FileUseCase
         
         $this->databaseRepository->deleteDirectorie($name);
         $this->alert->message('Directorio eliminado.', 'success');
-        
-        return $this->success;
     }
 
     /**
@@ -107,7 +107,7 @@ class FileUseCase
     * Delete a file
     * @param pathName
     */
-    public function deleteFile($pathName)
+    private function deleteFile($pathName)
     {
         if(!unlink($pathName))
         {
@@ -116,8 +116,6 @@ class FileUseCase
         }
 
         $this->alert->message('Archivo eliminado con exito', 'success');
-
-        return $this->success;
     }
    
 

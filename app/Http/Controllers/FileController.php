@@ -13,6 +13,8 @@ class FileController extends Controller
 {
     private $fileManager;
 
+    private $alert;
+
     /**
     * default path
     */
