@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Application\Database;
+namespace App\src\Database;
 
 use App\File;
 use App\Directorie;

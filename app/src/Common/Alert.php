@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Application\Common;
+namespace App\src\Common;
 
 class Alert
 {
@@ -8,10 +8,5 @@ class Alert
 	{
 		session()->flash('alert', $message);
         session()->flash('response', $response);
-	}
-
-	public function flush()
-	{
-		session()->flush();
 	}
 }

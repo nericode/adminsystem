@@ -3,11 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Directorie;
-use Illuminate\Http\Request;
-use App\Application\Common\Alert;
 use App\Http\Requests\FileRequest;
-use App\Application\Common\Archivist;
-use App\Application\Service\FileUseCase;
+use Illuminate\Http\Request;
+
+use App\src\Common\Alert;
+use App\src\Common\Archivist;
+use App\src\Service\FileCommand;
 
 class FileController extends Controller
 {
@@ -26,7 +27,7 @@ class FileController extends Controller
     */
     function __construct()
     {
-        $this->fileUseCase = new FileUseCase();
+        $this->fileCommand = new FileCommand();
     }
 
     /**
@@ -54,7 +55,7 @@ class FileController extends Controller
     public function store(Request $request)
     {
         $pathName = $request->path . DIRECTORY_SEPARATOR . $request->name;
-    	$this->fileUseCase->store($request->name, $pathName);
+    	$this->fileCommand->store($request->name, $pathName);
 
     	return $this->showView($request->path);
     }
@@ -66,7 +67,7 @@ class FileController extends Controller
     public function delete(Request $request)
     {
         $pathName = $request->path . DIRECTORY_SEPARATOR . $request->name;
-    	$this->fileUseCase->delete($request->name, $pathName, $request->type);
+    	$this->fileCommand->delete($request->name, $pathName, $request->type);
 
     	return $this->showView($request->path);
     }
@@ -78,7 +79,7 @@ class FileController extends Controller
     public function upload(Request $request)
     {	
         $file = $request->file('file');
-        $this->fileUseCase->upload($file, $request->path);
+        $this->fileCommand->upload($file, $request->path);
 
         return $this->showView($request->path);
         
@@ -102,9 +103,9 @@ class FileController extends Controller
     {
         $archivist   = new Archivist($path);
 
-        $directories = $archivist->directories();
-        $files       = $archivist->files();
-        $paths       = $archivist->paths();
+        $directories = $archivist->getDirectories();
+        $files       = $archivist->getFiles();
+        $paths       = $archivist->getPaths();
 
         return view('file.home')
         ->with('directories', $directories)
