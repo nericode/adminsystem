@@ -12,14 +12,7 @@ use App\src\Service\FileCommand;
 
 class FileController extends Controller
 {
-    private $fileManager;
-
-    private $alert;
-
-    /**
-    * default path
-    */
-    public $path = '/var/www/html/adminsystem/storage/app/';
+    private $fileCommand;
 
     /**
     *
@@ -36,7 +29,7 @@ class FileController extends Controller
     */
     public function index()
     {
-        return $this->showView($this->path);
+        return $this->showView('/var/www/html/adminsystem/storage/app/');
     }
 
     /**
