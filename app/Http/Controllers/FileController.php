@@ -12,6 +12,7 @@ use App\src\Service\FileCommand;
 
 class FileController extends Controller
 {
+<<<<<<< HEAD
     private $fileManager;
 
     private $alert;
@@ -21,6 +22,9 @@ class FileController extends Controller
     */
     public $path = 'C:\xampp\htdocs\adminsystem\storage\app\\';
     //public $path = '/var/www/html/adminsystem/storage/app/';
+=======
+    private $fileCommand;
+>>>>>>> 32d1fb9d17323a9db77a08568bb46fcc6af93776
 
     /**
     *
@@ -37,7 +41,7 @@ class FileController extends Controller
     */
     public function index()
     {
-        return $this->showView($this->path);
+        return $this->showView('/var/www/html/adminsystem/storage/app/');
     }
 
     /**

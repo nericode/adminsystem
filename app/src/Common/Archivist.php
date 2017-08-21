@@ -2,6 +2,7 @@
 
 namespace App\src\Common;
 
+use App\src\Exception\NotOpenDirectory;
 
 class Archivist
 {	
@@ -12,7 +13,7 @@ class Archivist
 
 	function __construct($path)
 	{
-		$this->path = $path;
+        $this->path = $path;
 	}
 
 	/** Get all directories into archivist */
@@ -69,7 +70,7 @@ class Archivist
         // Open directory
         if(!$openDirectory) 
         { 
-            throw new \Exception("No se pudeo abrir el directorio");
+            throw new NotOpenDirectory("No se pudeo abrir el directorio");
         }
 
         // Read files/directory into directory
@@ -110,7 +111,7 @@ class Archivist
         // Open directory
         if(!$openDirectory) 
         { 
-            throw new \Exception("No se pudeo abrir el directorio");
+            throw new NotOpenDirectory("No se pudeo abrir el directorio");
         }
        
         // Read files/directory into directory
