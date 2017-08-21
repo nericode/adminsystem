@@ -15,7 +15,7 @@ class FileController extends Controller
     /**
     * default path
     */
-    public $path = 'C:\xampp\htdocs\adminsystem\storage\app\\';
+    public $path = 'C:\xampp\htdocs\adminsystem\storage\app';
     //public $path = '/var/www/html/adminsystem/storage/app/';
 
     private $fileCommand;
@@ -80,8 +80,7 @@ class FileController extends Controller
         $file = $request->file('file');
         $this->fileCommand->upload($file, $request->path);
 
-        return $this->showView($request->path);
-        
+        return $this->showView($request->path);        
     }
 
     /**

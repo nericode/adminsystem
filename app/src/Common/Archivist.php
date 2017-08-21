@@ -35,7 +35,7 @@ class Archivist
         $realPaths = array();
         $addPath   = "";
 
-        $realPath  = substr($this->path, 40);
+        $realPath  = substr($this->path, 39);
         $paths     = explode("\\", $realPath);
 
 

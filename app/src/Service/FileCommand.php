@@ -119,7 +119,7 @@ class FileCommand
             return $this->error;
         }
 
-        $realPath = substr($pathName, 37);
+        $realPath = substr($pathName, 39);
         $name     = $file->getClientOriginalName();
         $file->storeAs($realPath, $name);
 

@@ -3,7 +3,6 @@
 namespace App\src\Database;
 
 use App\File;
-use App\Directorie;
 
 class DatabaseRepository
 {
@@ -14,10 +13,13 @@ class DatabaseRepository
     */
     public function storeDirectorie($name, $pathName)
     {
-        $directorie       = new Directorie;
-        $directorie->name = $name;
-        $directorie->path = $pathName;
-        $directorie->save();
+        $file       = new File;
+        $file->name = $name;
+        $file->path = $pathName;
+        $file->date_created = date('Y-m-d H:m:s');
+        $file->type = 'directorie';
+        $file->user_created = 'default';
+        $file->save();
     }
 
      /**
@@ -27,8 +29,8 @@ class DatabaseRepository
     */
     public function deleteDirectorie($name)
     {
-        $directorie  = Directorie::where('name', $name)->get();
-        $mdirectorie = Directorie::find($directorie[0]->id_directorie);
-        $mdirectorie->delete();
+        $file  = File::where('name', $name)->get();
+        $mfile = File::find($file[0]->id_file);
+        $mfile->delete();
     }
 }
