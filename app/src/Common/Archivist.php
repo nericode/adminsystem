@@ -5,7 +5,8 @@ namespace App\src\Common;
 
 class Archivist
 {	
-	public $defaultPath = '/var/www/html/adminsystem/storage/app/';
+    public $defaultPath = 'C:\xampp\htdocs\adminsystem\storage\app\\';
+	//public $defaultPath = '/var/www/html/adminsystem/storage/app/';
 
 	private $path;
 
@@ -33,8 +34,8 @@ class Archivist
         $realPaths = array();
         $addPath   = "";
 
-        $realPath  = substr($this->path, 38);
-        $paths     = explode("/", $realPath);
+        $realPath  = substr($this->path, 40);
+        $paths     = explode("\\", $realPath);
 
 
         foreach ($paths as $currentPath)

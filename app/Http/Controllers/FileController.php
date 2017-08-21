@@ -19,14 +19,15 @@ class FileController extends Controller
     /**
     * default path
     */
-    public $path = '/var/www/html/adminsystem/storage/app/';
+    public $path = 'C:\xampp\htdocs\adminsystem\storage\app\\';
+    //public $path = '/var/www/html/adminsystem/storage/app/';
 
     /**
     *
     * Contruct that initialize FileUseCase
     */
     function __construct()
-    {
+    {   
         $this->fileCommand = new FileCommand();
     }
 
