@@ -3,6 +3,7 @@
 namespace App\src\Database;
 
 use App\File;
+use Illuminate\Support\Facades\Auth;
 
 class DatabaseRepository
 {
@@ -14,11 +15,14 @@ class DatabaseRepository
     public function storeDirectorie($name, $pathName)
     {
         $file       = new File;
+        $user = Auth::user();
+        
         $file->name = $name;
         $file->path = $pathName;
+        $file->type = 'directory';
+        $file->user_created = $user->name;
         $file->date_created = date('Y-m-d H:m:s');
-        $file->type = 'directorie';
-        $file->user_created = 'default';
+        
         $file->save();
     }
 
@@ -30,7 +34,7 @@ class DatabaseRepository
     public function deleteDirectorie($name)
     {
         $file  = File::where('name', $name)->get();
-        $mfile = File::find($file[0]->id_file);
+        $mfile = File::find($file[0]->id);
         $mfile->delete();
     }
 }

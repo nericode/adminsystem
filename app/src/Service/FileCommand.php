@@ -2,7 +2,6 @@
 
 namespace App\src\Service;
 
-use App\Directorie;
 use Illuminate\Http\Request;
 use App\src\Common\Archivist;
 use App\src\Database\DatabaseRepository;
@@ -122,6 +121,8 @@ class FileCommand
         $realPath = substr($pathName, 39);
         $name     = $file->getClientOriginalName();
         $file->storeAs($realPath, $name);
+
+        $this->databaseRepository->storeFile($name, $pathName);
 
         return $this->success;
     }

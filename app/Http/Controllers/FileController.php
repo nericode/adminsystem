@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Directorie;
-use App\Http\Requests\FileRequest;
 use Illuminate\Http\Request;
+use App\Http\Requests\FileRequest;
+use Illuminate\Support\Facades\Auth;
+
 
 use App\src\Common\Alert;
 use App\src\Common\Archivist;
@@ -15,7 +17,8 @@ class FileController extends Controller
     /**
     * default path
     */
-    public $path = 'C:\xampp\htdocs\adminsystem\storage\app';
+
+    public $path = 'C:/xampp/htdocs/adminsystem/storage/app';
     //public $path = '/var/www/html/adminsystem/storage/app/';
 
     private $fileCommand;
@@ -26,6 +29,7 @@ class FileController extends Controller
     */
     function __construct()
     {   
+        $this->middleware('auth');
         $this->fileCommand = new FileCommand();
     }
 
@@ -106,10 +110,10 @@ class FileController extends Controller
         $paths       = $archivist->getPaths();
 
         return view('file.home')
-        ->with('directories', $directories)
         ->with('path', $path)
         ->with('files', $files)
-        ->with('paths', $paths);
+        ->with('paths', $paths)
+        ->with('directories', $directories);
     }
 
 }

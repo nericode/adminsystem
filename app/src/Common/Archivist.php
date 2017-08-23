@@ -2,6 +2,7 @@
 
 namespace App\src\Common;
 
+use App\File;
 use App\src\Exception\NotOpenDirectory;
 
 class Archivist
@@ -46,7 +47,7 @@ class Archivist
                 $addPath .= $currentPath . DIRECTORY_SEPARATOR;
                 $realPaths[] = [
                     'pathName' => $this->defaultPath . $addPath,
-                    'name' => $currentPath,
+                    'name' => $currentPath
                 ];
             }
         }
@@ -85,7 +86,14 @@ class Archivist
                         if(is_dir($rootPath . DIRECTORY_SEPARATOR . $read) &&
                             file_exists($rootPath . DIRECTORY_SEPARATOR . $read)) 
                         {   
-                            $directories[] = $read;
+                            $file  = File::where('name', $read)->get();
+                            $mfile = File::find($file[0]->id);  
+                            
+                            $directories[] = [
+                                'name' => $read,
+                                'user' => $mfile->user_created,
+                                'filemtime' => $mfile->date_created
+                            ];
                         }
                     break;
                 }

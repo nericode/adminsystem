@@ -67,6 +67,8 @@
                     <thead>
                         <tr>
                             <th>Directorio</th>
+                            <th>Usuario</th>
+                            <th>Fecha</th>
                             <th>Ver</th>
                             <th>Eliminar</th>
                         </tr>
@@ -78,29 +80,43 @@
                     	<tr>
                             
                             <td>
-                            <span style="padding: 10px;" class="glyphicon glyphicon-folder-open" aria-hidden="true"></span>
-                            {{ $directorie }}
+                                <span style="padding: 10px;" class="glyphicon glyphicon-folder-open" aria-hidden="true"></span>
+                                {{ $directorie["name"] }}
+                            </td>
+                            <td>
+                                {{ $directorie["user"] }}
+                            </td>
+                            <td>
+                                {{ $directorie["filemtime"] }}
                             </td>
                             <td>
                             <form action="{{ route('open_directorie') }}" method="get">
                                 {{ csrf_field() }}
-                                <input type="hidden" name="path" value="{{ $path . DIRECTORY_SEPARATOR . $directorie }}">
+                                <input type="hidden" name="path" value="{{ $path . DIRECTORY_SEPARATOR . $directorie["name"] }}">
                                 <button type="submit" class="btn btn-default btn-small ">
                                     <span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span>
                                 </button>
                             </form>
                             </td>
+                            @if(Auth::user()->name == $directorie["user"])
                             <td>
                             <form action="{{ route('delete_filemanager') }}" method="post">
                                 {{ csrf_field() }}
                                 <input type="hidden" name="type" value="directory">
-                                <input type="hidden" name="name" value="{{ $directorie }}">
+                                <input type="hidden" name="name" value="{{ $directorie["name"] }}">
                                 <input type="hidden" name="path" value="{{ $path }}">
                                 <button type="submit" class="btn btn-default btn-small ">
                                     <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
                                 </button> 
                             </form>
                             </td>
+                            @else 
+                            <td>
+                                <button type="submit" class="btn btn-default btn-small" disabled="true">
+                                    <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+                                </button> 
+                                </td>
+                            @endif
                     	</tr>
                         @endforeach
                     </tbody>

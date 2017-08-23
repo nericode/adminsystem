@@ -14,7 +14,7 @@ class File extends Model
     /**
     * @param $primaryKey, nombre del id de la tabla de la base de datos
     */
-    protected $primaryKey = 'id_file';
+    protected $primaryKey = 'id';
     
     /**
     * @param $timestamps, especifica si se requiere fechas en la tabla.
