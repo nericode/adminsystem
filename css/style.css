@@ -3,6 +3,14 @@ body {
     color: #424C55;
 }
 
+a {
+    color: black;
+}
+
+a:focus, a:hover {
+    text-decoration: none;
+}
+
 .navbar {
     border-top: 4px solid #20b885;
     border-bottom: 0;
