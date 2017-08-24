@@ -28,9 +28,9 @@ class FileController extends Controller
     * Contruct that initialize FileUseCase
     */
     function __construct()
-    {   
-        $this->middleware('auth');
-        $this->fileCommand = new FileCommand();
+    {
+      $this->middleware('auth');
+      $this->fileCommand = new FileCommand();
     }
 
     /**
@@ -39,7 +39,7 @@ class FileController extends Controller
     */
     public function index()
     {
-        return $this->showView($this->path);
+      return $this->showView($this->path);
     }
 
     /**
@@ -47,8 +47,8 @@ class FileController extends Controller
     * @return view
     */
     public function open(Request $request)
-    {   
-        return $this->showView($request->path);
+    {
+      return $this->showView($request->path);
     }
 
     /**
@@ -57,10 +57,10 @@ class FileController extends Controller
     */
     public function store(Request $request)
     {
-        $pathName = $request->path . DIRECTORY_SEPARATOR . $request->name;
-    	$this->fileCommand->store($request->name, $pathName);
+      $pathName = $request->path . DIRECTORY_SEPARATOR . $request->name;
+      $this->fileCommand->store($request->name, $pathName);
 
-    	return $this->showView($request->path);
+      return $this->showView($request->path);
     }
 
     /**
@@ -69,10 +69,10 @@ class FileController extends Controller
     */
     public function delete(Request $request)
     {
-        $pathName = $request->path . DIRECTORY_SEPARATOR . $request->name;
-    	$this->fileCommand->delete($request->name, $pathName, $request->type);
+      $pathName = $request->path . DIRECTORY_SEPARATOR . $request->name;
+      $this->fileCommand->delete($request->name, $pathName, $request->type);
 
-    	return $this->showView($request->path);
+      return $this->showView($request->path);
     }
 
     /**
@@ -80,11 +80,11 @@ class FileController extends Controller
     * @return view
     */
     public function upload(Request $request)
-    {	
-        $file = $request->file('file');
-        $this->fileCommand->upload($file, $request->path);
+    {
+      $file = $request->file('file');
+      $this->fileCommand->upload($file, $request->path);
 
-        return $this->showView($request->path);        
+      return $this->showView($request->path);
     }
 
     /**
@@ -92,8 +92,8 @@ class FileController extends Controller
     * @return download
     */
     public function download(Request $request)
-    {   
-        return response()->download($request->path);
+    {
+      return response()->download($request->path);
     }
 
 
@@ -103,17 +103,17 @@ class FileController extends Controller
     */
     public function showView($path = '')
     {
-        $archivist   = new Archivist($path);
+      $archivist   = new Archivist($path);
 
-        $files       = $archivist->getAllFiles();
-        $paths       = $archivist->getPaths();
+      $files       = $archivist->getAllFiles();
+      $paths       = $archivist->getPaths();
 
-        usort($files, array($this, 'orderType'));
+      usort($files, array($this, 'orderType'));
 
-        return view('file.home')
-        ->with('path', $path)
-        ->with('files', $files)
-        ->with('paths', $paths);
+      return view('file.home')
+      ->with('path', $path)
+      ->with('files', $files)
+      ->with('paths', $paths);
     }
 
     /**
@@ -122,7 +122,7 @@ class FileController extends Controller
     */
     private static function orderType($a, $b)
     {
-        return strcmp($a["type"], $b["type"]);
+      return strcmp($a["type"], $b["type"]);
     }
 
 }

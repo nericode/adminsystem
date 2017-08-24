@@ -4,12 +4,6 @@
 
 @include('file.alert')
 
-{{-- @if($errors->has())
-   @foreach ($errors->all() as $error)
-      <div>{{ $error }}</div>
-  @endforeach
-@endif --}}
-
 <div class="row">
     <div class="col-lg-12">
     	{{-- Panel --}}
@@ -22,7 +16,7 @@
                         <ul class="breadcrumb">
                         <li><a class="btn btn-primary btn-path" href="{{ route('files') }}">Principal</a></li>
                         @foreach($paths as $currentPath)
-                        
+
                             <li>
                                 <form action="{{ route('open_directorie') }}" method="get">
                                     {{ csrf_field() }}
@@ -30,7 +24,7 @@
                                     <button class="btn btn-primary btn-path" type="submit">{{ $currentPath["name"] }}</button>
                                 </form>
                             </li>
-                        
+
                         @endforeach
                         </ul>
             		</div>
@@ -40,7 +34,7 @@
                         {{ csrf_field() }}
                         <input type="hidden" name="path" value="{{ $path }}">
                         <button class="btn btn-primary btn-path" type="button" data-toggle="modal" data-target="#modalDirectory" title="Crear directorio">
-                            <span class="glyphicon glyphicon-folder-close" aria-hidden="true"></span> 
+                            <span class="glyphicon glyphicon-folder-close" aria-hidden="true"></span>
                         </button>
                         @include('modals.modal_create_directory')
                     </form>
@@ -49,7 +43,7 @@
                         {{ csrf_field() }}
                         <input type="hidden" name="path" value="{{ $path }}">
                         <button class="btn btn-primary btn-path" type="button" data-toggle="modal" data-target="#modalFile" title="Subir archivo">
-                            <span class="glyphicon glyphicon-open-file" aria-hidden="true"></span> 
+                            <span class="glyphicon glyphicon-open-file" aria-hidden="true"></span>
                         </button>
                         @include('modals.modal_upload_file')
                     </form>
@@ -103,14 +97,14 @@
                                         <input type="hidden" name="path" value="{{ $path }}">
                                         <button type="submit" class="btn btn-default btn-small ">
                                             <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
-                                        </button> 
+                                        </button>
                                     </form>
                                     </td>
-                                    @else 
+                                    @else
                                     <td>
                                         <button type="submit" class="btn btn-default btn-small" disabled="true">
                                             <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
-                                        </button> 
+                                        </button>
                                         </td>
                                     @endif
                                 </tr>
@@ -142,12 +136,12 @@
                                         <input type="hidden" name="path" value="{{ $path }}">
                                         <button type="submit" class="btn btn-default btn-small ">
                                             <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
-                                        </button> 
+                                        </button>
                                     </form>
                                     </td>
                                 </tr>
                             @endif
-                        
+
                         @endforeach
                     </tbody>
                     {{-- End table body --}}
