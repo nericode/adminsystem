@@ -59,7 +59,7 @@ class FileCommand
                 $this->deleteDirectory($pathName, $name);
                 break;
             case 'file':
-                $this->deleteFile($pathName, $name);
+                $this->deleteFile($pathName);
                 break;
         }
 
@@ -95,14 +95,12 @@ class FileCommand
     * Delete a file
     * @param pathName
     */
-    private function deleteFile($pathName, $name)
+    private function deleteFile($pathName)
     {
         if(!unlink($pathName))
         {
             return $this->error;
         }
-
-        $this->databaseRepository->deleteFile($name);
 
         return $this->success;
     }
@@ -115,20 +113,15 @@ class FileCommand
     */
     public function upload($file, $pathName)
     {	
-        $realPath = substr($pathName, 39);
-        $name     = $file->getClientOriginalName();
-
-        if(file_exists($pathName . DIRECTORY_SEPARATOR . $name)) 
-        {
-            return $this->error;
-        }
-
         if($file == null) 
         {
             return $this->error;
         }
 
+        $realPath = substr($pathName, 39);
+        $name     = $file->getClientOriginalName();
         $file->storeAs($realPath, $name);
+
         $this->databaseRepository->storeFile($name, $pathName);
 
         return $this->success;
