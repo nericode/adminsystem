@@ -6,7 +6,7 @@ use App\File;
 use App\src\Exception\NotOpenDirectory;
 
 class Archivist
-{	
+{
     public $defaultPath = 'C:\xampp\htdocs\adminsystem\storage\app\\';
 	//public $defaultPath = '/var/www/html/adminsystem/storage/app/';
 
@@ -17,21 +17,14 @@ class Archivist
         $this->path = $path;
 	}
 
-	/** Get all directories into archivist */
-    public function getDirectories()
-    {
-        return $this->getAllDirectories($this->path, 'directory');
-    }
-
-    /** Get all files into archivist */
-    public function getFiles()
-    {
-        return $this->getAllFiles($this->path, 'file');
-    }
-
-    /** Get an array of all names and path names of a path */
+    /** Get an array of all values path
+    * Example: Path: c:/htdocs/adminsystem/storage/myFolder
+    * the values his, name: myFolder and pathName: c:/htdocs/adminsystem/storage/myFolder
+    * it's to that can see the files in view with list.
+    * Example of list: > Principal > myFolder > etc > etc ...
+    */
     public function getPaths()
-    {   
+    {
         $paths     = array();
         $realPaths = array();
         $addPath   = "";
@@ -55,99 +48,65 @@ class Archivist
         return $realPaths;
     }
 
-    /** 
-    * Get all data(files/directory) 
-    * @param $path
-    * @param $type
-    * @return an array with all directories
-    */
-    private function getAllDirectories($rootPath = '', $type = '')
-    {
-        $directories        = array();
-        $openDirectory      = opendir($rootPath);
-        $invisibleFileNames = array(".", "..", ".gitignore", "public");
-        //$readDirectory = readdir($directory);
-
-        // Open directory
-        if(!$openDirectory) 
-        { 
-            throw new NotOpenDirectory("No se pudeo abrir el directorio");
-        }
-
-        // Read files/directory into directory
-        while($read = readdir($openDirectory)) 
-        {     
-            // Match with invisible files
-            if(!in_array($read, $invisibleFileNames)) 
-            {
-                switch ($type) 
-                {
-                    case 'directory':
-                        if(is_dir($rootPath . DIRECTORY_SEPARATOR . $read) &&
-                            file_exists($rootPath . DIRECTORY_SEPARATOR . $read)) 
-                        {   
-                            $file  = File::where('name', $read)->get();
-                            $mfile = File::find($file[0]->id);  
-                            
-                            $directories[] = [
-                                'name' => $read,
-                                'user' => $mfile->user_created,
-                                'filemtime' => $mfile->date_created
-                            ];
-                        }
-                    break;
-                }
-            }       
-        }
-
-        return $directories;
-    }
-
-     /** 
-    * Get all data(files/directory) 
-    * @param $path
-    * @param $type
+     /**
+    * Get all data(files/directory)
     * @return an array with all files
     */
-    private function getAllFiles($rootPath = '', $type = '')
+    public function getAllFiles()
     {
         $files              = array();
-        $openDirectory      = opendir($rootPath);
+        $openDirectory      = opendir($this->path);
         $invisibleFileNames = array(".", "..", ".gitignore", "public");
-        //$readDirectory = readdir($directory);
 
         // Open directory
-        if(!$openDirectory) 
-        { 
+        if(!$openDirectory)
+        {
             throw new NotOpenDirectory("No se pudeo abrir el directorio");
         }
-       
+
         // Read files/directory into directory
-        while($read = readdir($openDirectory)) 
-        {     
+        while($read = readdir($openDirectory))
+        {
             // Match with invisible files
-            if(!in_array($read, $invisibleFileNames)) 
+            if(!in_array($read, $invisibleFileNames))
             {
-                switch ($type) 
+                $file  = File::where('name', $read)->get();
+
+                if(count($file) > 0)
                 {
-                    case 'file':
-                        if(is_file($rootPath . DIRECTORY_SEPARATOR . $read) &&
-                            file_exists($rootPath . DIRECTORY_SEPARATOR . $read)) 
-                        {
-                            $files[] = $read;
-                        }
-                    break;
+                  $mfile = File::find($file[0]->id);
+
+                  if(is_file($this->path . DIRECTORY_SEPARATOR . $read) &&
+                      file_exists($this->path . DIRECTORY_SEPARATOR . $read))
+                  {
+                      $files[] = [
+                          'name' => $read,
+                          'type' => $mfile->type,
+                          'user' => $mfile->user_created,
+                          'filemtime' => $mfile->date_created
+                      ];
+                  }
+                  else if(is_dir($this->path . DIRECTORY_SEPARATOR . $read) &&
+                      file_exists($this->path . DIRECTORY_SEPARATOR . $read))
+                  {
+                      $files[] = [
+                          'name' => $read,
+                          'type' => $mfile->type,
+                          'user' => $mfile->user_created,
+                          'filemtime' => $mfile->date_created
+                      ];
+                  }
                 }
-            }       
+            }
         }
 
         return $files;
     }
 
-    /** Valid if the archivist is empty */
+    /** Valid if the archivist it's empty */
     public function isEmpty()
     {
-        if (count($this->getDirectories()) == 0 && count($this->getFiles()) == 0) 
+        if (count($this->getAllFiles()) == 0)
         {
             return true;
         }
