@@ -92,8 +92,8 @@
                                     <td>
                                         {{ $file["filemtime"] }}
                                     </td>
-                                    @if(Auth::user()->name == $file["user"])
                                     <td>
+                                    @if(Auth::user()->name == $file["user"])
                                     <form action="{{ route('delete_filemanager') }}" method="post">
                                         {{ csrf_field() }}
                                         <input type="hidden" name="type" value="directory">
@@ -103,11 +103,8 @@
                                             <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
                                         </button>
                                     </form>
-                                    </td>
-                                    @else
-                                    <td>
-                                    </td>
                                     @endif
+                                    </td>
                                 </tr>
                             @else
                                 <tr>
@@ -133,6 +130,7 @@
                                         {{ $file["filemtime"] }}
                                     </td>
                                     <td>
+                                    @if(Auth::user()->name == $file["user"])
                                     <form action="{{ route('delete_filemanager') }}" method="post">
                                         {{ csrf_field() }}
                                         <input type="hidden" name="type" value="file">
@@ -142,6 +140,7 @@
                                             <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
                                         </button>
                                     </form>
+                                    @endif
                                     </td>
                                 </tr>
                             @endif
