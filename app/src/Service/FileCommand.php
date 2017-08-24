@@ -7,7 +7,7 @@ use App\src\Common\Archivist;
 use App\src\Database\DatabaseRepository;
 
 class FileCommand
-{	
+{
     private $error = false;
 
     private $success = true;
@@ -25,12 +25,12 @@ class FileCommand
     */
     public function store($name, $pathName)
     {
-        if(file_exists($pathName)) 
+        if(file_exists($pathName))
         {
             return $this->error;
         }
 
-        if(!mkdir($pathName, 0777)) 
+        if(!mkdir($pathName, 0777))
         {
             return $this->error;
         }
@@ -48,12 +48,12 @@ class FileCommand
     */
     public function delete($name, $pathName, $type)
     {
-        if(!file_exists($pathName)) 
+        if(!file_exists($pathName))
         {
             return $this->error;
         }
 
-        switch ($type) 
+        switch ($type)
         {
             case 'directory':
                 $this->deleteDirectory($pathName, $name);
@@ -86,7 +86,7 @@ class FileCommand
         {
             return $this->error;
         }
-        
+
         $this->databaseRepository->deleteDirectorie($name);
     }
 
@@ -106,7 +106,7 @@ class FileCommand
 
         return $this->success;
     }
-   
+
 
     /**
     *
@@ -114,22 +114,22 @@ class FileCommand
     * @param request
     */
     public function upload($file, $pathName)
-    {	
+    {
         $realPath = substr($pathName, 39);
         $name     = $file->getClientOriginalName();
 
-        if(file_exists($pathName . DIRECTORY_SEPARATOR . $name)) 
+        if(file_exists($pathName . DIRECTORY_SEPARATOR . $name))
         {
             return $this->error;
         }
 
-        if($file == null) 
+        if($file == null)
         {
             return $this->error;
         }
 
         $file->storeAs($realPath, $name);
-        $this->databaseRepository->storeFile($name, $pathName);
+        $this->databaseRepository->storeFile($name, $pathName . DIRECTORY_SEPARATOR . $name);
 
         return $this->success;
     }

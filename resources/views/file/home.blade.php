@@ -60,6 +60,7 @@
                         <tr>
                             <th>Nombre</th>
                             <th>Usuario</th>
+                            <th>Tamaño</th>
                             <th>Fecha</th>
                             <th>Eliminar</th>
                         </tr>
@@ -73,17 +74,20 @@
                                     <td>
                                         <a href="{{ route('open_directorie') }}"
                                         onclick="event.preventDefault();
-                                                 document.getElementById('open-directorie').submit();">
+                                                 document.getElementById('open-directorie-{{ $file["name"] }}').submit();">
                                         <span style="padding: 10px;" class="glyphicon glyphicon-folder-open" aria-hidden="true"></span>
                                         {{ $file["name"] }}
                                         </a>
-                                        <form id="open-directorie" action="{{ route('open_directorie') }}" method="get">
+                                        <form id="open-directorie-{{ $file["name"] }}" action="{{ route('open_directorie') }}" method="get">
                                         {{ csrf_field() }}
                                         <input type="hidden" name="path" value="{{ $path . DIRECTORY_SEPARATOR . $file["name"] }}">
                                         </form>
                                     </td>
                                     <td>
                                         {{ $file["user"] }}
+                                    </td>
+                                    <td>
+
                                     </td>
                                     <td>
                                         {{ $file["filemtime"] }}
@@ -124,6 +128,9 @@
                                     </td>
                                     <td>
                                         {{ $file["user"] }}
+                                    </td>
+                                    <td>
+                                        {{ $file["size"] }}
                                     </td>
                                     <td>
                                         {{ $file["filemtime"] }}
