@@ -106,10 +106,7 @@
                                     </td>
                                     @else
                                     <td>
-                                        <button type="submit" class="btn btn-default btn-small" disabled="true">
-                                            <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
-                                        </button>
-                                        </td>
+                                    </td>
                                     @endif
                                 </tr>
                             @else
