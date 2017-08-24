@@ -115,7 +115,7 @@ class FileCommand
     */
     public function upload($file, $pathName)
     {
-        $realPath = substr($pathName, 39);
+        $realPath = substr($pathName, Archivist::getLengthSubsPath());
         $name     = $file->getClientOriginalName();
 
         if(file_exists($pathName . DIRECTORY_SEPARATOR . $name))

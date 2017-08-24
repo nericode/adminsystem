@@ -7,9 +7,6 @@ use App\src\Exception\NotOpenDirectory;
 
 class Archivist
 {
-    public $defaultPath = 'C:\xampp\htdocs\adminsystem\storage\app\\';
-	//public $defaultPath = '/var/www/html/adminsystem/storage/app/';
-
 	private $path;
 
 	function __construct($path)
@@ -29,17 +26,15 @@ class Archivist
         $realPaths = array();
         $addPath   = "";
 
-        $realPath  = substr($this->path, 39);
+        $realPath  = substr($this->path, Archivist::getLengthSubsPath());
         $paths     = explode("\\", $realPath);
 
 
-        foreach ($paths as $currentPath)
-        {
-            if($currentPath != "")
-            {
+        foreach ($paths as $currentPath) {
+            if($currentPath != "") {
                 $addPath .= $currentPath . DIRECTORY_SEPARATOR;
                 $realPaths[] = [
-                    'pathName' => $this->defaultPath . $addPath,
+                    'pathName' => Archivist::getDefaultPath() . $addPath,
                     'name' => $currentPath
                 ];
             }
@@ -59,26 +54,21 @@ class Archivist
         $invisibleFileNames = array(".", "..", ".gitignore", "public");
 
         // Open directory
-        if(!$openDirectory)
-        {
+        if(!$openDirectory) {
             throw new NotOpenDirectory("No se pudeo abrir el directorio");
         }
 
         // Read files/directory into directory
-        while($read = readdir($openDirectory))
-        {
+        while($read = readdir($openDirectory)) {
             // Match with invisible files
-            if(!in_array($read, $invisibleFileNames))
-            {
+            if(!in_array($read, $invisibleFileNames)) {
                 $file  = File::where('name', $read)->get();
 
-                if(count($file) > 0)
-                {
+                if(count($file) > 0) {
                   $mfile = File::find($file[0]->id);
 
                   if(is_file($this->path . DIRECTORY_SEPARATOR . $read) &&
-                      file_exists($this->path . DIRECTORY_SEPARATOR . $read))
-                  {
+                      file_exists($this->path . DIRECTORY_SEPARATOR . $read)) {
                       $files[] = [
                           'name' => $read,
                           'type' => $mfile->type,
@@ -88,8 +78,7 @@ class Archivist
                       ];
                   }
                   else if(is_dir($this->path . DIRECTORY_SEPARATOR . $read) &&
-                      file_exists($this->path . DIRECTORY_SEPARATOR . $read))
-                  {
+                      file_exists($this->path . DIRECTORY_SEPARATOR . $read)) {
                       $files[] = [
                           'name' => $read,
                           'type' => $mfile->type,
@@ -107,12 +96,23 @@ class Archivist
     /** Valid if the archivist it's empty */
     public function isEmpty()
     {
-        if (count($this->getAllFiles()) == 0)
-        {
+        if (count($this->getAllFiles()) == 0) {
             return true;
         }
 
         return false;
+    }
+
+    /** Get default paht */
+    public static function getDefaultPath()
+    {
+        return getcwd() . '\storage\app\\';
+    }
+
+    /** Get length max for the path by default */
+    public static function getLengthSubsPath()
+    {
+        return 39;
     }
 
     /**
@@ -148,10 +148,8 @@ class Archivist
                 ),
             );
 
-        foreach($arBytes as $arItem)
-        {
-            if($bytes >= $arItem["VALUE"])
-            {
+        foreach($arBytes as $arItem) {
+            if($bytes >= $arItem["VALUE"]) {
                 $result = $bytes / $arItem["VALUE"];
                 $result = str_replace(".", "," , strval(round($result, 2)))." ".$arItem["UNIT"];
                 break;
