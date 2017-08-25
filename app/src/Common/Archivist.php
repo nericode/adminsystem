@@ -90,7 +90,19 @@ class Archivist
             }
         }
 
+		// Sort array by type.
+		usort($files, array($this, 'orderType'));
+
         return $files;
+    }
+
+	/**
+    * Sort array
+    * @return integer
+    */
+    private static function orderType($a, $b)
+    {
+        return strcmp($a["type"], $b["type"]);
     }
 
     /** Valid if the archivist it's empty */

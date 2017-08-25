@@ -18,6 +18,7 @@ class FileCommand
     {
         $this->databaseRepository = new DatabaseRepository;
     }
+    
     /**
     *
     * Store a directory
@@ -25,13 +26,11 @@ class FileCommand
     */
     public function store($name, $pathName)
     {
-        if(file_exists($pathName))
-        {
+        if(file_exists($pathName)) {
             return $this->error;
         }
 
-        if(!mkdir($pathName, 0777))
-        {
+        if(!mkdir($pathName, 0777)) {
             return $this->error;
         }
 
@@ -40,7 +39,6 @@ class FileCommand
         return $this->success;
     }
 
-
     /**
     *
     * Delete a directory/file
@@ -48,13 +46,11 @@ class FileCommand
     */
     public function delete($name, $pathName, $type)
     {
-        if(!file_exists($pathName))
-        {
+        if(!file_exists($pathName)) {
             return $this->error;
         }
 
-        switch ($type)
-        {
+        switch ($type) {
             case 'directory':
                 $this->deleteDirectory($pathName, $name);
                 break;
@@ -77,13 +73,11 @@ class FileCommand
     {
         $archivist   = new Archivist($pathName);
 
-        if(!$archivist->isEmpty())
-        {
+        if(!$archivist->isEmpty()) {
             return $this->error;
         }
 
-        if(!rmdir($pathName))
-        {
+        if(!rmdir($pathName)) {
             return $this->error;
         }
 
@@ -97,8 +91,7 @@ class FileCommand
     */
     private function deleteFile($pathName, $name)
     {
-        if(!unlink($pathName))
-        {
+        if(!unlink($pathName)) {
             return $this->error;
         }
 
@@ -118,13 +111,11 @@ class FileCommand
         $realPath = substr($pathName, Archivist::getLengthSubsPath());
         $name     = $file->getClientOriginalName();
 
-        if(file_exists($pathName . DIRECTORY_SEPARATOR . $name))
-        {
+        if(file_exists($pathName . DIRECTORY_SEPARATOR . $name)) {
             return $this->error;
         }
 
-        if($file == null)
-        {
+        if($file == null) {
             return $this->error;
         }
 

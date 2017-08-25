@@ -101,21 +101,11 @@ class FileController extends Controller
         $files       = $archivist->getAllFiles();
         $paths       = $archivist->getPaths();
 
-        usort($files, array($this, 'orderType'));
-
         return view('file.home')
         ->with('path', $path)
         ->with('files', $files)
         ->with('paths', $paths);
     }
 
-    /**
-    * Sort array
-    * @return integer
-    */
-    private static function orderType($a, $b)
-    {
-        return strcmp($a["type"], $b["type"]);
-    }
 
 }
