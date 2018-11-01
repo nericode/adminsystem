@@ -2,7 +2,6 @@
 
 namespace App\src\Service;
 
-use Illuminate\Http\Request;
 use App\src\Common\Archivist;
 use App\src\Database\DatabaseRepository;
 
@@ -18,19 +17,19 @@ class FileCommand
     {
         $this->databaseRepository = new DatabaseRepository;
     }
-    
+
     /**
-    *
-    * Store a directory
-    * @param request
-    */
+     * @param $name
+     * @param $pathName
+     * @return bool
+     */
     public function store($name, $pathName)
     {
-        if(file_exists($pathName)) {
+        if (file_exists($pathName)) {
             return $this->error;
         }
 
-        if(!mkdir($pathName, 0777)) {
+        if (!mkdir($pathName, 0777)) {
             return $this->error;
         }
 
@@ -40,13 +39,14 @@ class FileCommand
     }
 
     /**
-    *
-    * Delete a directory/file
-    * @param request
-    */
+     * @param $name
+     * @param $pathName
+     * @param $type
+     * @return bool
+     */
     public function delete($name, $pathName, $type)
     {
-        if(!file_exists($pathName)) {
+        if (!file_exists($pathName)) {
             return $this->error;
         }
 
@@ -64,20 +64,20 @@ class FileCommand
 
 
     /**
-    *
-    * Delete a directory
-    * @param pathName
-    * @param name
-    */
+     *
+     * Delete a directory
+     * @param pathName
+     * @param name
+     */
     private function deleteDirectory($pathName, $name)
     {
-        $archivist   = new Archivist($pathName);
+        $archivist = new Archivist($pathName);
 
-        if(!$archivist->isEmpty()) {
+        if (!$archivist->isEmpty()) {
             return $this->error;
         }
 
-        if(!rmdir($pathName)) {
+        if (!rmdir($pathName)) {
             return $this->error;
         }
 
@@ -85,13 +85,13 @@ class FileCommand
     }
 
     /**
-    *
-    * Delete a file
-    * @param pathName
-    */
+     *
+     * Delete a file
+     * @param pathName
+     */
     private function deleteFile($pathName, $name)
     {
-        if(!unlink($pathName)) {
+        if (!unlink($pathName)) {
             return $this->error;
         }
 
@@ -102,20 +102,20 @@ class FileCommand
 
 
     /**
-    *
-    * Upload a file
-    * @param request
-    */
+     * @param $file
+     * @param $pathName
+     * @return bool
+     */
     public function upload($file, $pathName)
     {
         $realPath = substr($pathName, Archivist::getLengthSubsPath());
-        $name     = $file->getClientOriginalName();
+        $name = $file->getClientOriginalName();
 
-        if(file_exists($pathName . DIRECTORY_SEPARATOR . $name)) {
+        if (file_exists($pathName . DIRECTORY_SEPARATOR . $name)) {
             return $this->error;
         }
 
-        if($file == null) {
+        if ($file == null) {
             return $this->error;
         }
 

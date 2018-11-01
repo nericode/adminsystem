@@ -96,6 +96,7 @@ class FileController extends Controller
     */
     public function showView($path = "")
     {
+        //dd($path);
         $archivist   = new Archivist($path);
 
         $files       = $archivist->getAllFiles();
