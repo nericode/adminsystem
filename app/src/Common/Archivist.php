@@ -22,13 +22,11 @@ class Archivist
      */
     public function getPaths()
     {
-        $paths = array();
         $realPaths = array();
         $addPath = "";
 
         $realPath = substr($this->path, Archivist::getLengthSubsPath());
-        $paths = explode("\\", $realPath);
-
+        $paths = explode("/", $realPath);
 
         foreach ($paths as $currentPath) {
             if ($currentPath != "") {
@@ -43,9 +41,11 @@ class Archivist
         return $realPaths;
     }
 
+
     /**
      * Get all data(files/directory)
-     * @return an array with all files
+     * @return array
+     * @throws NotOpenDirectory
      */
     public function getAllFiles()
     {
@@ -123,7 +123,7 @@ class Archivist
     /** Get length max for the path by default */
     public static function getLengthSubsPath()
     {
-        return 39;
+        return 38;
     }
 
     /**
