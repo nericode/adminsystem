@@ -118,13 +118,13 @@ class Archivist
     /** Get default paht */
     public static function getDefaultPath()
     {
-        return getcwd() . '\storage\app\\';
+        return getcwd() . '/storage/app';
     }
 
     /** Get length max for the path by default */
     public static function getLengthSubsPath()
     {
-        return 39;
+        return 44;
     }
 
     /**
